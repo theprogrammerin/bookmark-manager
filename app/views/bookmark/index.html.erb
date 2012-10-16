@@ -1,4 +1,249 @@
-<h1>Bookmark#index</h1>
-<p>Find me in app/views/bookmark/index.html.erb</p>
 
 
+<div class="body_wrapper">
+	<div class="fix">
+		<div>
+			<div class="title">
+				Bookmark Manager
+			</div>
+		</div>
+		<div>
+			<div class="hr">
+	
+			</div>
+		</div>
+		<div>
+			<div class="search">
+		
+				<form>
+					<input id="new_button" type="button" value="New Bookmark" />
+					<label for="search_keyword">Search Bookmarks : </label>
+					<input id="search_keyword" type="text" value="" />
+					<input id="search_button" type="button" value="Search " />
+				</form>
+			</div>
+		</div>
+		<div>
+			<div class="list">
+				<table border="0" cellspacing="0" class="header">
+					<tr>
+						<th>
+							Title
+						</th>
+						<th>
+							Link
+						</th>
+						<th>
+							Added by
+						</th>
+						<th>
+							Tags
+						</th>
+					</tr>
+				</table>
+				
+				<div class="lock">
+				<table border="0" cellspacing="0" class="data">
+					<% @bookmark.each do |bm| %>
+					
+					<tr>
+						<td>
+							<%= bm.title%>
+						</td>
+						<td>
+							<%= bm.link%>
+						</td>
+						<td>
+							<%= bm.name%>
+						</td>
+						<td>
+							<%= bm.tags%>
+						</td>
+						<td class="remove">
+							&otimes;
+						</td>
+					</tr>
+					<% end %>
+				</table>
+				</div>
+			</div>
+		</div>
+		<div style="height:5px;">
+		
+		</div>
+		<div>
+			<div class="hr">
+	
+			</div>
+		</div>
+		<div>
+			<div class="footer">
+				&copy; 2012 - TheProgrammer - Developed by Ashutosh Agrawal
+			</div>
+		</div>
+	</div>
+</div>
+<div class="lightbox_wrapper" style="display:none;">
+	<div class="lightbox">
+		<div class="close">
+			Close
+		</div>
+		<div class="title">
+			New Bookmark
+		</div>
+		<div class="hr" ></div>
+		<div class="new_form">
+		
+			<label for="b_title">Title </label>
+			<input id="b_title" type="text" value="" />
+			<br/>
+			<label for="b_link">Link </label>
+			<input id="b_link" type="text" value="" />
+			<br/>
+			<label for="b_name">Your Name </label>
+			<input id="b_name" type="text" value="" />
+			<br/>
+			<label for="b_tags">Tags</label>
+			<input id="b_tags" type="text" value="" />
+			<br/>
+			<div style="height:10px; display:block;">
+			</div>
+			<input id="new_bookmark" type="button" value="Save Bookmark" />
+		</div>
+	</div>
+</div>
+
+<%= raw @script %>
+
+
+<div class="link_open" style="display:none;" >
+	<a href = " " target="_new" >Link</a>
+</div>
+
+<script type="text/javascript">
+
+	var Bookmark = Backbone.Model.extend({
+
+		defaults : function(){
+		
+			return {
+				title : "empty"
+				};
+		},
+		initialize : function() {
+		
+			if($('.new_form #b_link').val().indexOf("http") < 0)
+			{
+				$('.new_form #b_link').val("http://" + $('.new_form #b_link').val());
+			}
+			this.set({
+				
+				"title" : $('.new_form #b_title').val(),
+				"link" : $('.new_form #b_link').val(),
+				"name" : $('.new_form #b_name').val(),
+				"tags" : $('.new_form #b_tags').val()
+			});
+			console.log("New Model Intializing");
+		},
+		
+		clear: function(){
+		
+			this.destroy();
+		},
+		
+		getLink : function(){
+			
+			return this.get("link");
+		},
+		
+
+	});
+	
+	var BookmarkList = Backbone.Collection.extend({
+		model: Bookmark,
+		//localStorage : new Store("bookmarktp")
+	});
+	
+	var Bookmarks = new BookmarkList();
+	
+	var BookmarkView = Backbone.View.extend({
+	
+		tagName: "tr",
+		
+		template: _.template($('#bookmark-template').html()),
+		
+		events: {
+			"click td.remove" : "clear",
+		},
+		
+		initialize: function() {
+			  this.model.bind('destroy', this.remove, this);
+			},
+		
+		render: function(){
+		
+			console.log("Rendering View");
+			this.$el.html(this.template(this.model.toJSON()));
+			return this;
+		},
+		
+		clear: function(){
+			this.model.clear();
+		},
+		
+		open_link : function(){
+			
+			console.log("Bookmark Clicked");
+			
+			
+			window.open(this.model.getLink(), '_blank');
+		},
+	
+	});
+	
+	var AppView = Backbone.View.extend({
+	
+		
+		el:$('body'),
+		
+		initialize: function(){
+			
+			console.log("App Intialized");
+		},
+		events: {
+		
+			"click #new_bookmark" : "append",
+			"click #search_button" : "search_key"
+		},
+		
+		add_new: function(){
+			
+		},
+		
+		append : function(){
+			
+			console.log("Intialized");
+			var view = new BookmarkView({model : new Bookmark()});
+			$('table.data').append(view.render().el);
+			Bookmarks.add(this.model);
+		},
+		
+		search_key : function(){
+		
+			if($('#search_keyword').val() == "")
+			{
+				$('label[for=search_keyword]').css('color','red');
+				return;
+			}
+			Bookmarks.where({"name":$('label[for=search_keyword]')});		
+			
+			console.log("Searching..");
+		},
+	});
+	
+$(function(){
+
+	var app = new AppView();
+});
+
+</script>

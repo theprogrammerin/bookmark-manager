@@ -95,6 +95,15 @@ div.fix
  	font-size:16px;
  	padding:2px 0px;
  }
+ div.search span.search_result
+ {
+ 	display:block;
+ 	float:right;
+ 	height:12px;
+ 	font-size:12px;
+ 	padding:3px 0px;
+ 	margin-right:
+ }
  
  $dark_border: 1px solid #444;
  $light_border : 1px solid #666;
@@ -199,7 +208,7 @@ div.fix
  }
  div.list table tr th:nth-child(2),  div.list table tr td:nth-child(2)
  {
- 	width:350px;
+ 	width:250px;
  }
  div.list table tr th:nth-child(3),  div.list table tr td:nth-child(3)
  {

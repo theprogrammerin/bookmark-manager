@@ -15,11 +15,14 @@
 		<div>
 			<div class="search">
 		
-				<form>
+				<form action="" onsubmit="$(this).children('#search_button').trigger('click'); return false;">
 					<input id="new_button" type="button" value="New Bookmark" />
 					<label for="search_keyword">Search Bookmarks : </label>
 					<input id="search_keyword" type="text" value="" />
 					<input id="search_button" type="button" value="Search " />
+					<span class="search_result" >
+						
+					</span>
 				</form>
 			</div>
 		</div>
@@ -44,7 +47,11 @@
 				
 				<div class="lock">
 				<table border="0" cellspacing="0" class="data">
-					
+						<tr class="none" style="display:none;">
+							<td colspan="5">
+								No Bookmarks Found
+							</td>
+						</tr>
 				</table>
 				</div>
 			</div>
@@ -105,44 +112,52 @@
 
 	var Bookmark = Backbone.Model.extend({
 
-		defaults : function(){
-		
-			return {
-				title : "empty"
-				};
-		},
 		initialize : function() {
 		
-			if($('.new_form #b_link').val().indexOf("http") < 0)
-			{
-				$('.new_form #b_link').val("http://" + $('.new_form #b_link').val());
-			}
-			this.set({
-				
-				"title" : $('.new_form #b_title').val(),
-				"link" : $('.new_form #b_link').val(),
-				"name" : $('.new_form #b_name').val(),
-				"tags" : $('.new_form #b_tags').val()
-			});
 			console.log("New Model Intializing");
 		},
-		
 		clear: function(){
-		
 			this.destroy();
-		},
-		
+		},		
 		getLink : function(){
-			
 			return this.get("link");
 		},
-		
-
 	});
 	
 	var BookmarkList = Backbone.Collection.extend({
 		model: Bookmark,
-		//localStorage : new Store("bookmarktp")
+		localStorage : new Backbone.LocalStorage("bookmarktp"),
+		
+		initialize : function(){
+			console.log("Collection");
+			console.log(localStorage);
+		},
+		search : function(key){
+			var count = 0;
+			this.each(function(temp){
+			
+				tags = String(temp.attributes.tags);
+				console.log(tags+ " "  + key);
+				if( tags.indexOf(key) >=0)
+				{
+					$("td input[value="+temp.attributes.id+"]").parent().parent().fadeIn(200);
+					count++;
+				}
+				else
+					$("td input[value="+temp.attributes.id+"]").parent().parent().fadeOut(200);
+					
+			});
+			
+			if(count==0)
+				$('table.data tr.none').fadeIn(200);
+			else
+				$('table.data tr.none').fadeOut(10);
+			
+			$('span.search_result').html(count + " Bookmarks Found");
+		},
+		nextOrder : function(){
+			return this.length + 1;
+		}
 	});
 	
 	var Bookmarks = new BookmarkList();
@@ -154,30 +169,30 @@
 		template: _.template($('#bookmark-template').html()),
 		
 		events: {
-			"click td.remove" : "clear",
-			"click" : "open_link",
+			"click td.remove" : "hide",
+			"click td:not(:nth-child(5))" : "open_link",
 		},
 		
 		initialize: function() {
-			  this.model.bind('destroy', this.remove, this);
-			},
+			this.model.bind('destroy', this.remove, this);
+			this.model.bind('hide', this.hide, this);
+		},
 		
 		render: function(){
-		
 			console.log("Rendering View");
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		},
-		
+		hide: function(){
+			console.log("hiding");
+			this.$el.fadeOut(200);
+		},
 		clear: function(){
 			this.model.clear();
 		},
 		
 		open_link : function(){
-			
 			console.log("Bookmark Clicked");
-			
-			
 			window.open(this.model.getLink(), '_blank');
 		},
 	
@@ -185,31 +200,55 @@
 	
 	var AppView = Backbone.View.extend({
 	
-		
 		el:$('body'),
-		
 		initialize: function(){
 			
 			console.log("App Intialized");
+			Bookmarks.bind('add',this.add_new,this);
+			Bookmarks.bind('reset',this.addAll,this);
+			Bookmarks.fetch();			
 		},
 		events: {
-		
 			"click #new_bookmark" : "append",
 			"click #search_button" : "search_key"
 		},
-		
-		add_new: function(){
-			
+		add_new: function(bookmark){
+			console.log("Adding New");
+			var view = new BookmarkView({model : bookmark});
+			$('table.data').append(view.render().el);
 		},
-		
+		addAll : function(){		
+			Bookmarks.each(this.add_new);
+		},
 		append : function(){
 			
-			console.log("Intialized");
-			var view = new BookmarkView({model : new Bookmark()});
-			$('table.data').append(view.render().el);
-			Bookmarks.add(this.model);
+			var item = ['b_title','b_link','b_name','b_tags'];
+			var flag = 0;
+			for(i=0 ; i<4; i++)
+			{
+				if($('.new_form #'+item[i]).val()== "")
+				{
+					$('.new_form label[for='+item[i]+']').css('color','red');
+					flag = 1;
+				}
+			}
+			if(flag==1)
+				return;
+				
+			if($('.new_form #b_link').val().indexOf("http") < 0)
+			{
+				$('.new_form #b_link').val("http://" + $('.new_form #b_link').val());
+			}
+			Bookmarks.create({
+				"id" : Bookmarks.nextOrder(),
+				"title" : $('.new_form #b_title').val(),
+				"link" : $('.new_form #b_link').val(),
+				"name" : $('.new_form #b_name').val(),
+				"tags" : $('.new_form #b_tags').val()
+			});			
+			$('.lightbox .close').trigger('click');
+			$('.new_form input[type=text]').val("");
 		},
-		
 		search_key : function(){
 		
 			if($('#search_keyword').val() == "")
@@ -217,10 +256,15 @@
 				$('label[for=search_keyword]').css('color','red');
 				return;
 			}
-			Bookmarks.where({"name":$('label[for=search_keyword]')});		
-			
-			console.log("Searching..");
+			else
+				$('label[for=search_keyword]').css('color','#333');
+		
+			Bookmarks.search($('#search_keyword').val());
 		},
+		remove_without_tag : function(bookmark, key)
+		{
+			var tags = bookmark.get("tags");
+		}
 	});
 	
 $(function(){

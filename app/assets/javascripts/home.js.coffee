@@ -14,7 +14,7 @@ $(document).ready( ()->
 	);
 )	
 
-close = ->
+closelb = ->
 	$('.lightbox .close').trigger('click');
 
 

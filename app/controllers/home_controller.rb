@@ -3,6 +3,7 @@ class HomeController < ApplicationController
   	@script = <<"EOF";
 		<script type="text/template" id="bookmark-template">
 				<td>
+					<input type="hidden" id="b_id" value=<%= id %> />
 					<%= title %>
 				</td>
 				<td>

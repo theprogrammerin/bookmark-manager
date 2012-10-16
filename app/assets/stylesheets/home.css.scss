@@ -95,6 +95,15 @@ div.fix
  	font-size:16px;
  	padding:2px 0px;
  }
+ div.search span.search_result
+ {
+ 	display:block;
+ 	float:right;
+ 	height:12px;
+ 	font-size:12px;
+ 	padding:3px 0px;
+ 	margin-right:100px;
+ }
  
  $dark_border: 1px solid #444;
  $light_border : 1px solid #666;
