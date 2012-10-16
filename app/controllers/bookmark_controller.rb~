@@ -2,7 +2,7 @@ class BookmarkController < ApplicationController
   
   def index
   	
-  	@bookmark = Bookmark.al
+  	@bookmark = Bookmark.all
   	respond_to do |format|
   		format.html
   		format.json { render json: @bookmark }
