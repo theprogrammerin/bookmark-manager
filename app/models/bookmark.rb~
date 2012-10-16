@@ -1,3 +1,0 @@
-class Bookmark < ActiveRecord::Base
-  attr_accessible :link, :name, :tags, :title
-end
