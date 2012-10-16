@@ -1,13 +1,12 @@
 Bookmarks::Application.routes.draw do
-  #get "bookmark/index"
+  get "bookmark/index"
 
-  #get "bookmark/create"
+  post "bookmark/create"
 
-  #get "bookmark/update"
+  post "bookmark/update"
 
-  #get "bookmark/destroy"
+  match "bookmark/destroy/:id" => "bookmark#destroy", via: :delete
 
-resource :bookmark
   match "/bookmark" => "bookmark#index"
   root :to => "home#index"
 

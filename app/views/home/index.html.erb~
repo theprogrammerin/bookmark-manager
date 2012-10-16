@@ -111,23 +111,27 @@
 <script type="text/javascript">
 
 	var Bookmark = Backbone.Model.extend({
-
+		
 		initialize : function() {
 		
 			console.log("New Model Intializing");
 		},
 		clear: function(){
-			this.destroy();
+			this.destroy({
+				
+				"url" : "/bookmark/destroy/"+this.id,
+				"type" : "Delete"  
+			});
 		},		
 		getLink : function(){
 			return this.get("link");
-		},
+		}
 	});
 	
 	var BookmarkList = Backbone.Collection.extend({
 		model: Bookmark,
 		//localStorage : new Backbone.LocalStorage("bookmarktp"),
-		url : "/bookmark/index",
+		url : "/bookmark",
 		initialize : function(){
 			console.log("Collection");
 			console.log(localStorage);
@@ -169,12 +173,12 @@
 		template: _.template($('#bookmark-template').html()),
 		
 		events: {
-			"click td.remove" : "hide",
+			"click td.remove" : "clear",
 			"click td:not(:nth-child(5))" : "open_link",
 		},
 		
 		initialize: function() {
-			this.model.bind('destroy', this.remove, this);
+			this.model.bind('destroy', this.remove({"id": this.model.get("id")},{'url': '/bookmark/destroy'}), this);
 			this.model.bind('hide', this.hide, this);
 		},
 		
@@ -188,6 +192,7 @@
 			this.$el.fadeOut(200);
 		},
 		clear: function(){
+			this.$el.fadeOut(200);
 			this.model.clear();
 		},
 		
@@ -245,7 +250,10 @@
 				"link" : $('.new_form #b_link').val(),
 				"name" : $('.new_form #b_name').val(),
 				"tags" : $('.new_form #b_tags').val()
-			});			
+			},{ 
+					"url" : "/bookmark/create", 
+					"type" : "PUT"
+				});			
 			$('.lightbox .close').trigger('click');
 			$('.new_form input[type=text]').val("");
 		},

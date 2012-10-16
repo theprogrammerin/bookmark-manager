@@ -10,7 +10,9 @@ class BookmarkController < ApplicationController
   end
 
   def create
-  	@bookmark = Bookmark.new(params[:post])
+
+	req = ActiveSupport::JSON.decode(request.body)
+	@bookmark = Bookmark.new(req)
   	respond_to do |format|
   		if @bookmark.save
   			format.html { redirect_to @bookmark, notice: "Bookmark Added" }
@@ -28,7 +30,8 @@ class BookmarkController < ApplicationController
   
   def update
   	
-  	@bookmark = Bookmark.find(params[:id])
+  	req = ActiveSupport::JSON.decode(request.body)
+  	@bookmark = Bookmark.find(req)
   	
   	respond_to do |format|
 		if @bookmark.update_attributes(params[:id])
@@ -47,7 +50,7 @@ class BookmarkController < ApplicationController
   	@bookmark.destroy
   	
   	respond_to do |format|
-      format.html { redirect_to :action => index }
+      format.html { status: :no_content }
       format.json { head :no_content }
     end
   end
