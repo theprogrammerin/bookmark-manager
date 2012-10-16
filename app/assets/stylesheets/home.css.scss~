@@ -1,0 +1,302 @@
+// Place all the styles related to the home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+$_color : #333;
+  
+ @mixin round($top, $right:0, $bottom:0, $left:0){
+	
+	$top : $top + px;
+	$right : $right + px;
+	$bottom : $bottom + px;
+	$left : $left + px;
+	border-radius: $top $right $bottom $left;
+	-moz-border-radius: $top $right $bottom $left;
+ 	-webkit-border-radius: $top $right $bottom $left;
+ }
+ 
+ @mixin linear-grad($direction, $start, $end){
+ 
+ 	 background:	$start;
+ 	 background: 	-moz-linear-gradient($direction, $start, $end);
+ 	 background:	-webkit-linear-gradient($direction, $start, $end);
+ 	 background:	-ms-linear-gradient($direction, $start, $end);
+ 	 background:	-o-linear-gradient($direction, $start, $end);
+ }
+ 
+ body{
+ 	background-color:#DDD; 
+ }
+ 
+ 
+ div.body_wrapper{
+ 	
+	@include round(5);
+	position:absolute;
+	background-color:#FFF;
+	min-height:400px;
+	min-width:1000px;
+	top:25px;
+	bottom:0px;
+	left:25px;
+	right:0px;
+	box-shadow: 0px 0px 5px 0px #666;
+	z-index:3;
+ }
+div.fix
+ {
+ 	position:relative;
+ 	height:100%;
+ 	width:99%;
+ 	margin:auto;
+ 	display:table;
+ }
+ div.fix > div
+ {
+ 	display:table-row;
+ }
+  div.fix > div > div
+  {
+  	display: table-cell;
+  }
+ 
+ div.hr
+ {
+ 	@include linear-grad(left, #666, #FFF);
+ 	height:1px;
+ 	margin:0 10px;
+ 	
+ }
+ div.title {
+ 	
+ 	color: $_color;		
+ 	
+ 	height:25px;
+ 	padding:5px;
+ 	margin:5px;
+ 	font-size:25px;
+ 	line-height:25px;
+ 	
+ }
+ div.search
+ {
+ 	color: $_color;		
+ 	
+ 	height:20px;
+ 	padding:5px 5px 10px;
+ 	
+ }
+ div.search  label
+ {
+ 	vertical-align:middle;
+ 	display:inline-block;
+ 	height:16px;
+ 	font-size:16px;
+ 	padding:2px 0px;
+ }
+ 
+ $dark_border: 1px solid #444;
+ $light_border : 1px solid #666;
+ 
+ input[type=text]
+ {
+ vertical-align:middle;
+ 	display:inline-block;
+ 	height:16px;
+ 	width:200px;
+ 	font-size:12px;
+ 	padding:1px 0px;
+ 	margin:1px 0;
+ 	border: $light_border;
+ 	box-shadow: 1px 1px 1px 0px #DDD inset;
+ }
+ input[type=button]
+ {
+ 	@include round(2,2,2,2);
+ 	cursor: pointer;
+ 	vertical-align:middle;
+ 	display:inline-block;
+ 	height:20px;
+ 	font-size:13px;
+ 	padding:1px 10px;
+ 	margin:1px 0;
+ 	background-color: #DDD;
+ 	border:1px solid #666;
+ }
+ div.search  input[type=button]:hover
+ {
+ 	background-color: #EEE;
+ }
+ div.list
+ {
+ 	color: $_color;		
+ 	position:relative;
+ 	padding:5px 5px 10px;
+ }
+ div.list div.lock
+ {
+ 	position:absolute;
+ 	top:31px;
+ 	bottom:0px;
+ 	left:5px;
+ 	right:5px;
+ 	overflow:auto;
+ 	border:1px solid #888;
+ 	border-top:0px;
+ }
+ div.list table
+ {
+ 	height:25px;
+ 	width: 100%; 
+ 	text-align:left;
+ }
+ div.list table.header
+ {
+ 	width: 100%; 
+ 	text-align:left;
+ 	@include round(5,5,0,0);
+ 	border:1px solid #888;
+ 	border-bottom:0px;
+ }
+ div.list table.header tr:first-child
+ {
+ 	position:static;
+ 	color:#666;
+ 	height:25px;
+ 	@include linear-grad(top, #DDD, #EEE);
+ }
+ div.list table.data tr:nth-child(odd)
+ {
+ 	position:static;
+ 	height:25px;
+ 	font-size:15px;
+ 	@include linear-grad(top, #E1FFE1, #E1FFE1);
+ }
+ div.list table.data tr:nth-child(even)
+ {
+ 	position:static;
+ 	height:25px;
+ 	font-size:15px;
+ 	@include linear-grad(top, #EFE, #EFE);
+ }
+ div.list table.data tr:hover
+ {
+ 	cursor: pointer;
+ 	@include linear-grad(top, #DDF, #DDF);
+ }
+ div.list table tr th, div.list table tr td
+ {
+ 	border:0px;
+ 	padding:0 0 0 5px;
+ }
+ div.list table tr td{
+ 	vertical-align:middle;
+ }
+ div.list table tr th:nth-child(1),  div.list table tr td:nth-child(1)
+ {
+ 	width:200px;
+ }
+ div.list table tr th:nth-child(2),  div.list table tr td:nth-child(2)
+ {
+ 	width:350px;
+ }
+ div.list table tr th:nth-child(3),  div.list table tr td:nth-child(3)
+ {
+ 	width:150px;
+ }
+ div.list table tr td:nth-child(5)
+ {
+ 	width:25px;
+ 	font-size:20px;
+ 	color:#AAA;
+ }
+ div.list table tr td:nth-child(5):hover
+ {
+ 	color:#666;
+ }
+ div.list table tr th:first-child{
+ 	@include round(5,0,0,0);
+ 	}
+ 	
+ div.list table tr th:last-child{
+ 	@include round(0,5,0,0);}
+ 
+ 
+ div.footer
+ {
+ 	color: $_color;		
+ 	
+ 	height:15px;
+ 	padding:2px 5px 10px;
+ 	font-size:12px;	
+ }
+ div.lightbox_wrapper
+ {
+ 	position:absolute;
+ 	width:100%;
+	height:100%;
+ 	left:0px;
+ 	background-color: rgba(0, 0 ,0, 0.2);
+ 	z-index:4;
+ }
+ div.lightbox
+ {
+ 	position:fixed;
+ 	background-color: #FFF;
+ 	top:50%;
+ 	left:50%;
+ 	margin-top:-150px;
+ 	margin-left:-250px;
+ 	height:300px;
+ 	width:500px;
+ 	z-index:5;
+ 	box-shadow:0px 0px 10px 0px #666;
+ }
+ div.close
+ {
+ 	height:20px;
+ 	width:50px;
+ 	position:absolute;
+ 	right:0px;
+ 	top:0px;
+ 	background-color:#666;
+ 	@include round(0,0,0,5);
+ 	color:#FFF;
+ 	font-size:13px;
+ 	text-align:center;
+ 	vertical-align:bottom;
+ }
+ div.close:hover
+ {
+ 	cursor:pointer;
+ 	color:#666;
+ 	background-color:#DDD;
+ }
+ 
+ div.new_form 
+ {
+ 	margin:10px;
+ }
+ div.new_form label
+ {
+ 	font-size:15px;
+ 	line-height:15px;
+ 	display:inline-block;
+ 	height:15px;
+ 	margin:2px 0px;
+ 	width:90px;
+ 	padding-right:0px;
+ 	padding-top:5px;
+ 	vertical-align:bottom;
+ }
+ div.new_form input
+ {
+ 	display:inline-block;
+ 	vertical-align:bottom;
+ 	
+ }
+ div.new_form input[type=text]
+ {
+ 	width:475px !important;
+ }

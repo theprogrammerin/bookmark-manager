@@ -1,0 +1,14 @@
+class CreateBookmarks < ActiveRecord::Migration
+  def change
+    create_table :bookmark do |t|
+      t.string :title
+      t.string :link
+      t.string :name
+      t.text :tags
+
+      t.timestamps
+      
+      add_index :id
+    end
+  end
+end
