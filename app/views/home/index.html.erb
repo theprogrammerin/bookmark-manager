@@ -126,8 +126,8 @@
 	
 	var BookmarkList = Backbone.Collection.extend({
 		model: Bookmark,
-		localStorage : new Backbone.LocalStorage("bookmarktp"),
-		
+		//localStorage : new Backbone.LocalStorage("bookmarktp"),
+		url : "/bookmark",
 		initialize : function(){
 			console.log("Collection");
 			console.log(localStorage);

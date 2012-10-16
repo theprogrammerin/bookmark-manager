@@ -1,12 +1,14 @@
 Bookmarks::Application.routes.draw do
-  get "bookmark/index"
+  #get "bookmark/index"
 
-  get "bookmark/create"
+  #get "bookmark/create"
 
-  get "bookmark/update"
+  #get "bookmark/update"
 
-  get "bookmark/destroy"
+  #get "bookmark/destroy"
 
+  resource :bookmark
+  match "/bookmark" => "bookmark#index"
   root :to => "home#index"
 
   # The priority is based upon order of creation:

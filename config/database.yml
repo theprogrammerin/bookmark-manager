@@ -32,11 +32,11 @@ test:
   socket: /var/run/mysqld/mysqld.sock
 
 production:
-  adapter: mysql
+  adapter: postgresql
   encoding: utf8
   reconnect: false
-  database: bookmarks_production
+  database: dfoag5sbrfhbvp
   pool: 5
-  username: root
-  password: toor
-  socket: /var/run/mysqld/mysqld.sock
+  username: jtgpvdvvtslggs
+  password: z0rGp6wHXBmNUZkUuoQbRr3JWa
+  port: 5432

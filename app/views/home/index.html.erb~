@@ -126,8 +126,8 @@
 	
 	var BookmarkList = Backbone.Collection.extend({
 		model: Bookmark,
-		localStorage : new Backbone.LocalStorage("bookmarktp"),
-		
+		//localStorage : new Backbone.LocalStorage("bookmarktp"),
+		url : "/bookmark/index",
 		initialize : function(){
 			console.log("Collection");
 			console.log(localStorage);
@@ -153,7 +153,7 @@
 			else
 				$('table.data tr.none').fadeOut(10);
 			
-			$('span.search_result').html(count )
+			$('span.search_result').html(count + " Bookmarks Found");
 		},
 		nextOrder : function(){
 			return this.length + 1;
